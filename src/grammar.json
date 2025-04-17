@@ -14,6 +14,14 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "PREC",
+          "value": 10,
+          "content": {
+            "type": "SYMBOL",
+            "name": "_renpy_statements"
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "_simple_statements"
         },
@@ -66,6 +74,44 @@
         {
           "type": "SYMBOL",
           "name": "_newline"
+        }
+      ]
+    },
+    "_renpy_statements": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_renpy_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "_renpy_statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "renpy_header"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_inline"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_dialogue"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_menu_choice"
         }
       ]
     },
@@ -765,14 +811,6 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "renpy_header"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "renpy_statement"
-        },
-        {
-          "type": "SYMBOL",
           "name": "if_statement"
         },
         {
@@ -809,11 +847,55 @@
         }
       ]
     },
-    "number": {
-      "type": "TOKEN",
+    "renpy_inline": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "$"
+            },
+            {
+              "type": "STRING",
+              "value": "define"
+            },
+            {
+              "type": "STRING",
+              "value": "default"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_simple_statement"
+        }
+      ]
+    },
+    "renpy_dialogue": {
+      "type": "PREC",
+      "value": 10,
       "content": {
-        "type": "PATTERN",
-        "value": "[+-]?\\d+(\\.\\d+)?"
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "string"
+          }
+        ]
       }
     },
     "renpy_header": {
@@ -828,6 +910,10 @@
             "content": {
               "type": "CHOICE",
               "members": [
+                {
+                  "type": "STRING",
+                  "value": "menu"
+                },
                 {
                   "type": "STRING",
                   "value": "label"
@@ -847,6 +933,10 @@
                 {
                   "type": "STRING",
                   "value": "animate"
+                },
+                {
+                  "type": "STRING",
+                  "value": "screen"
                 }
               ]
             }
@@ -859,7 +949,7 @@
                 "name": "priority",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "number"
+                  "name": "integer"
                 }
               },
               {
@@ -906,7 +996,20 @@
         ]
       }
     },
-    "renpy_statement": {
+    "renpy_menu_choice": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        }
+      ]
+    },
+    "renpy_expression": {
       "type": "CHOICE",
       "members": [
         {
@@ -918,14 +1021,6 @@
               "content": {
                 "type": "CHOICE",
                 "members": [
-                  {
-                    "type": "STRING",
-                    "value": "transform"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "screen"
-                  },
                   {
                     "type": "STRING",
                     "value": "image"
@@ -952,15 +1047,7 @@
                   },
                   {
                     "type": "STRING",
-                    "value": "return"
-                  },
-                  {
-                    "type": "STRING",
                     "value": "call"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "define"
                   },
                   {
                     "type": "STRING",
@@ -1033,10 +1120,6 @@
                   {
                     "type": "STRING",
                     "value": "time"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "pass"
                   },
                   {
                     "type": "STRING",
@@ -1120,10 +1203,6 @@
                   },
                   {
                     "type": "STRING",
-                    "value": "transform"
-                  },
-                  {
-                    "type": "STRING",
                     "value": "viewport"
                   },
                   {
@@ -1144,21 +1223,45 @@
                   },
                   {
                     "type": "STRING",
-                    "value": "default"
+                    "value": "use"
                   },
                   {
                     "type": "STRING",
-                    "value": "use"
+                    "value": "with"
                   }
                 ]
               }
             },
             {
-              "type": "REPEAT",
+              "type": "REPEAT1",
               "content": {
                 "type": "SYMBOL",
                 "name": "identifier"
               }
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "string"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ":"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
             }
           ]
         }
@@ -1217,6 +1320,10 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
         }
       ]
     },
@@ -6606,7 +6713,7 @@
     ],
     [
       "primary_expression",
-      "renpy_statement"
+      "renpy_menu_choice"
     ],
     [
       "tuple",
@@ -6637,11 +6744,16 @@
       "primary_expression"
     ],
     [
-      "return_statement",
-      "renpy_statement"
+      "pass_statement",
+      "renpy_expression"
     ],
     [
-      "renpy_statement"
+      "return_statement",
+      "renpy_expression"
+    ],
+    [
+      "primary_expression",
+      "renpy_expression"
     ]
   ],
   "precedences": [],

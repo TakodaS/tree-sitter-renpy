@@ -29,6 +29,7 @@ const PREC = {
 	unary: 20,
 	power: 21,
 	call: 22,
+	renpy: 10,
 };
 
 const SEMICOLON = ";";
@@ -45,7 +46,7 @@ module.exports = grammar({
 	conflicts: ($) => [
 		[$.primary_expression, $.pattern],
 		[$.primary_expression, $.list_splat_pattern],
-		[$.primary_expression, $.renpy_statement],
+		[$.primary_expression, $.renpy_menu_choice],
 		[$.tuple, $.tuple_pattern],
 		[$.list, $.list_pattern],
 		[$.with_item, $._collection_elements],
@@ -53,8 +54,9 @@ module.exports = grammar({
 		[$.print_statement, $.primary_expression],
 		[$.type_alias_statement, $.primary_expression],
 		[$.match_statement, $.primary_expression],
-		[$.return_statement, $.renpy_statement],
-		[$.renpy_statement],
+		[$.pass_statement, $.renpy_expression],
+		[$.return_statement, $.renpy_expression],
+		[$.primary_expression, $.renpy_expression],
 	],
 
 	supertypes: ($) => [
@@ -104,7 +106,12 @@ module.exports = grammar({
 	rules: {
 		module: ($) => repeat($._statement),
 
-		_statement: ($) => choice($._simple_statements, $._compound_statement),
+		_statement: ($) =>
+			choice(
+				prec(PREC.renpy, $._renpy_statements),
+				$._simple_statements,
+				$._compound_statement,
+			),
 
 		// Simple statements
 
@@ -115,6 +122,15 @@ module.exports = grammar({
 				$._newline,
 			),
 
+		_renpy_statements: ($) => seq($._renpy_statement, $._newline),
+		_renpy_statement: ($) =>
+			choice(
+				$.renpy_header,
+				$.renpy_inline,
+				$.renpy_dialogue,
+				$.renpy_expression,
+				$.renpy_menu_choice,
+			),
 		_simple_statement: ($) =>
 			choice(
 				$.future_import_statement,
@@ -239,8 +255,6 @@ module.exports = grammar({
 
 		_compound_statement: ($) =>
 			choice(
-				$.renpy_header,
-				$.renpy_statement,
 				$.if_statement,
 				$.for_statement,
 				$.while_statement,
@@ -253,38 +267,47 @@ module.exports = grammar({
 			),
 
 		// Numbers
-		number: (_) => token(/[+-]?\d+(\.\d+)?/),
+		renpy_inline: ($) =>
+			seq(choice("$", "define", "default"), $._simple_statement),
+		renpy_dialogue: ($) =>
+			prec(PREC.renpy, seq(optional($.identifier), $.string)),
+
 		renpy_header: ($) =>
 			prec(
 				1,
 				seq(
 					field(
 						"keyword",
-						choice("label", "init", "early", "transform", "animate"),
+						choice(
+							"menu",
+							"label",
+							"init",
+							"early",
+							"transform",
+							"animate",
+							"screen",
+						),
 					),
-					optional(field("priority", $.number)),
+					optional(field("priority", $.integer)),
 					optional(field("identifier", $.identifier)),
 					optional(field("parameters", $.parameters)),
 					":",
 				),
 			),
-		renpy_statement: ($) =>
+		renpy_menu_choice: ($) => seq($.string, ":"),
+		renpy_expression: ($) =>
 			choice(
 				seq(
 					field(
 						"keyword",
 						choice(
-							"transform",
-							"screen",
 							"image",
 							"hide",
 							"show",
 							"scene",
 							"jump",
 							"menu",
-							"return",
 							"call",
-							"define",
 							"play",
 							"stop",
 							"queue",
@@ -303,7 +326,6 @@ module.exports = grammar({
 							"block",
 							"contains",
 							"time",
-							"pass",
 							"repeat",
 							"add",
 							"bar",
@@ -324,17 +346,18 @@ module.exports = grammar({
 							"input",
 							"key",
 							"timer",
-							"transform",
 							"viewport",
 							"hotspot",
 							"hotbar",
 							"text",
 							"has",
-							"default",
 							"use",
+							"with",
 						),
 					),
-					repeat($.identifier),
+					repeat1($.identifier),
+					optional($.string),
+					optional(":"),
 				),
 			),
 		if_statement: ($) =>
@@ -345,6 +368,7 @@ module.exports = grammar({
 				field("consequence", $._suite),
 				repeat(field("alternative", $.elif_clause)),
 				optional(field("alternative", $.else_clause)),
+				$._newline,
 			),
 
 		elif_clause: ($) =>
