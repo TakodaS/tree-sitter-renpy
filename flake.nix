@@ -30,7 +30,7 @@
           };
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              tree-sitter
+              (tree-sitter.override { webUISupport = true; })
               nodejs
             ];
           };

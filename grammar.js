@@ -10,20 +10,50 @@
 module.exports = grammar({
 	name: "renpy",
 
-	extras: ($) => [/\s/, $.comment],
+	extras: ($) => [
+		$.comment,
+		/[\s\f\uFEFF\u2060\u200B]|\r?\n/,
+		// $.line_continuation,
+	],
+	externals: ($) => [
+		$._newline,
+		$._indent,
+		$._dedent,
+		$.string_start,
+		$._string_content,
+		$.escape_interpolation,
+		$.string_end,
 
+		// Mark comments as external tokens so that the external scanner is always
+		// invoked, even if no external token is expected. This allows for better
+		// error recovery, because the external scanner can maintain the overall
+		// structure by returning dedent tokens whenever a dedent occurs, even
+		// if no dedent is expected.
+		$.comment,
+
+		// Allow the external scanner to check for the validity of closing brackets
+		// so that it can avoid returning dedent tokens between brackets.
+		"]",
+		")",
+		"}",
+		"except",
+	],
 	rules: {
 		source_file: ($) =>
 			repeat(
 				choice(
-					$.header,
-					$.statement,
-					$.python_block,
-					$.python_inline,
+					$.comment,
 					$.string,
-					$.number,
+					// $.header,
+					// $.statement,
+					// $.python_block,
+					// $.python_inline,
+					// $.number,
 				),
 			),
+
+		// block
+		block: ($) => seq($._newline, $._indent, repeat1($.statement), $._dedent),
 
 		// Comments
 		comment: (_) => token(seq("#", /.*/)),
@@ -54,11 +84,12 @@ module.exports = grammar({
 					optional(field("identifier", $.identifier)),
 					optional(field("args", $.arguments)),
 					":",
+					$.block,
 				),
 			),
 
 		// Python inline: starts with '$'
-		python_inline: ($) => seq("$", /.+/),
+		python_inline: ($) => seq("$", $.python_expression),
 
 		// Python blocks
 		python_block: ($) =>
@@ -73,9 +104,9 @@ module.exports = grammar({
 				),
 			),
 
-		indented_python: (_) => token(seq(/[ ]{4}/, /.*/)),
+		indented_python: ($) => seq(/[ ]{4}/, $.python_expression),
 
-		python_expression: ($) => choice($.python_inline, $.python_block),
+		python_expression: (_) => token(/.*/),
 
 		// Identifiers (variable, label names)
 		identifier: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
@@ -88,81 +119,80 @@ module.exports = grammar({
 				")",
 			),
 
+		// Renpy keywords
+
 		// Ren'Py statements
 		statement: ($) =>
-			choice(
-				seq(
-					field(
-						"keyword",
-						choice(
-							"transform",
-							"screen",
-							"image",
-							"hide",
-							"show",
-							"scene",
-							"jump",
-							"menu",
-							"return",
-							"call",
-							"if",
-							"elif",
-							"else",
-							"define",
-							"play",
-							"stop",
-							"queue",
-							"voice",
-							"sustain",
-							"event",
-							"on",
-							"pause",
-							"linear",
-							"ease",
-							"easein",
-							"easeout",
-							"choice",
-							"function",
-							"parallel",
-							"block",
-							"contains",
-							"time",
-							"pass",
-							"repeat",
-							"add",
-							"bar",
-							"vbar",
-							"button",
-							"textbutton",
-							"imagebutton",
-							"mousearea",
-							"imagemap",
-							"fixed",
-							"frame",
-							"grid",
-							"hbox",
-							"vbox",
-							"side",
-							"window",
-							"null",
-							"input",
-							"key",
-							"timer",
-							"transform",
-							"viewport",
-							"hotspot",
-							"hotbar",
-							"text",
-							"has",
-							"default",
-							"for",
-							"use",
-						),
+			seq(
+				field(
+					"keyword",
+					choice(
+						"transform",
+						"screen",
+						"image",
+						"hide",
+						"show",
+						"scene",
+						"jump",
+						"menu",
+						"return",
+						"call",
+						"if",
+						"elif",
+						"else",
+						"define",
+						"play",
+						"stop",
+						"queue",
+						"voice",
+						"sustain",
+						"event",
+						"on",
+						"pause",
+						"linear",
+						"ease",
+						"easein",
+						"easeout",
+						"choice",
+						"function",
+						"parallel",
+						"block",
+						"contains",
+						"time",
+						"pass",
+						"repeat",
+						"add",
+						"bar",
+						"vbar",
+						"button",
+						"textbutton",
+						"imagebutton",
+						"mousearea",
+						"imagemap",
+						"fixed",
+						"frame",
+						"grid",
+						"hbox",
+						"vbox",
+						"side",
+						"window",
+						"null",
+						"input",
+						"key",
+						"timer",
+						"transform",
+						"viewport",
+						"hotspot",
+						"hotbar",
+						"text",
+						"has",
+						"default",
+						"for",
+						"use",
 					),
-					repeat($.identifier),
-					"=",
-					field("value", $.python_expression),
 				),
+				$.identifier,
+				optional(seq("=", $.python_expression)),
 			),
 	},
 });

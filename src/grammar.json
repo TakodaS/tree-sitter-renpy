@@ -9,30 +9,38 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "header"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "statement"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "python_block"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "python_inline"
+            "name": "comment"
           },
           {
             "type": "SYMBOL",
             "name": "string"
-          },
-          {
-            "type": "SYMBOL",
-            "name": "number"
           }
         ]
       }
+    },
+    "block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_indent"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "statement"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_dedent"
+        }
+      ]
     },
     "comment": {
       "type": "TOKEN",
@@ -206,6 +214,10 @@
           {
             "type": "STRING",
             "value": ":"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "block"
           }
         ]
       }
@@ -218,8 +230,8 @@
           "value": "$"
         },
         {
-          "type": "PATTERN",
-          "value": ".+"
+          "type": "SYMBOL",
+          "name": "python_expression"
         }
       ]
     },
@@ -281,19 +293,23 @@
       }
     },
     "indented_python": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "PATTERN",
+          "value": "[ ]{4}"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "python_expression"
+        }
+      ]
+    },
+    "python_expression": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "PATTERN",
-            "value": "[ ]{4}"
-          },
-          {
-            "type": "PATTERN",
-            "value": ".*"
-          }
-        ]
+        "type": "PATTERN",
+        "value": ".*"
       }
     },
     "identifier": {
@@ -347,274 +363,287 @@
       ]
     },
     "statement": {
-      "type": "CHOICE",
+      "type": "SEQ",
       "members": [
         {
-          "type": "SEQ",
+          "type": "FIELD",
+          "name": "keyword",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "transform"
+              },
+              {
+                "type": "STRING",
+                "value": "screen"
+              },
+              {
+                "type": "STRING",
+                "value": "image"
+              },
+              {
+                "type": "STRING",
+                "value": "hide"
+              },
+              {
+                "type": "STRING",
+                "value": "show"
+              },
+              {
+                "type": "STRING",
+                "value": "scene"
+              },
+              {
+                "type": "STRING",
+                "value": "jump"
+              },
+              {
+                "type": "STRING",
+                "value": "menu"
+              },
+              {
+                "type": "STRING",
+                "value": "return"
+              },
+              {
+                "type": "STRING",
+                "value": "call"
+              },
+              {
+                "type": "STRING",
+                "value": "if"
+              },
+              {
+                "type": "STRING",
+                "value": "elif"
+              },
+              {
+                "type": "STRING",
+                "value": "else"
+              },
+              {
+                "type": "STRING",
+                "value": "define"
+              },
+              {
+                "type": "STRING",
+                "value": "play"
+              },
+              {
+                "type": "STRING",
+                "value": "stop"
+              },
+              {
+                "type": "STRING",
+                "value": "queue"
+              },
+              {
+                "type": "STRING",
+                "value": "voice"
+              },
+              {
+                "type": "STRING",
+                "value": "sustain"
+              },
+              {
+                "type": "STRING",
+                "value": "event"
+              },
+              {
+                "type": "STRING",
+                "value": "on"
+              },
+              {
+                "type": "STRING",
+                "value": "pause"
+              },
+              {
+                "type": "STRING",
+                "value": "linear"
+              },
+              {
+                "type": "STRING",
+                "value": "ease"
+              },
+              {
+                "type": "STRING",
+                "value": "easein"
+              },
+              {
+                "type": "STRING",
+                "value": "easeout"
+              },
+              {
+                "type": "STRING",
+                "value": "choice"
+              },
+              {
+                "type": "STRING",
+                "value": "function"
+              },
+              {
+                "type": "STRING",
+                "value": "parallel"
+              },
+              {
+                "type": "STRING",
+                "value": "block"
+              },
+              {
+                "type": "STRING",
+                "value": "contains"
+              },
+              {
+                "type": "STRING",
+                "value": "time"
+              },
+              {
+                "type": "STRING",
+                "value": "pass"
+              },
+              {
+                "type": "STRING",
+                "value": "repeat"
+              },
+              {
+                "type": "STRING",
+                "value": "add"
+              },
+              {
+                "type": "STRING",
+                "value": "bar"
+              },
+              {
+                "type": "STRING",
+                "value": "vbar"
+              },
+              {
+                "type": "STRING",
+                "value": "button"
+              },
+              {
+                "type": "STRING",
+                "value": "textbutton"
+              },
+              {
+                "type": "STRING",
+                "value": "imagebutton"
+              },
+              {
+                "type": "STRING",
+                "value": "mousearea"
+              },
+              {
+                "type": "STRING",
+                "value": "imagemap"
+              },
+              {
+                "type": "STRING",
+                "value": "fixed"
+              },
+              {
+                "type": "STRING",
+                "value": "frame"
+              },
+              {
+                "type": "STRING",
+                "value": "grid"
+              },
+              {
+                "type": "STRING",
+                "value": "hbox"
+              },
+              {
+                "type": "STRING",
+                "value": "vbox"
+              },
+              {
+                "type": "STRING",
+                "value": "side"
+              },
+              {
+                "type": "STRING",
+                "value": "window"
+              },
+              {
+                "type": "STRING",
+                "value": "null"
+              },
+              {
+                "type": "STRING",
+                "value": "input"
+              },
+              {
+                "type": "STRING",
+                "value": "key"
+              },
+              {
+                "type": "STRING",
+                "value": "timer"
+              },
+              {
+                "type": "STRING",
+                "value": "transform"
+              },
+              {
+                "type": "STRING",
+                "value": "viewport"
+              },
+              {
+                "type": "STRING",
+                "value": "hotspot"
+              },
+              {
+                "type": "STRING",
+                "value": "hotbar"
+              },
+              {
+                "type": "STRING",
+                "value": "text"
+              },
+              {
+                "type": "STRING",
+                "value": "has"
+              },
+              {
+                "type": "STRING",
+                "value": "default"
+              },
+              {
+                "type": "STRING",
+                "value": "for"
+              },
+              {
+                "type": "STRING",
+                "value": "use"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "keyword",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "transform"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "screen"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "image"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "hide"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "show"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "scene"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "jump"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "menu"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "return"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "call"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "if"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "elif"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "else"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "define"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "play"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "stop"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "queue"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "voice"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "sustain"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "event"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "on"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "pause"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "linear"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "ease"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "easein"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "easeout"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "choice"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "function"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "parallel"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "block"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "contains"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "time"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "pass"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "repeat"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "add"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "bar"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "vbar"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "button"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "textbutton"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "imagebutton"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "mousearea"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "imagemap"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "fixed"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "frame"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "grid"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "hbox"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "vbox"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "side"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "window"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "null"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "input"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "key"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "timer"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "transform"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "viewport"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "hotspot"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "hotbar"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "text"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "has"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "default"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "for"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "use"
-                  }
-                ]
-              }
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "python_expression"
+                }
+              ]
             },
             {
-              "type": "REPEAT",
-              "content": {
-                "type": "SYMBOL",
-                "name": "identifier"
-              }
+              "type": "BLANK"
             }
           ]
         }
@@ -623,17 +652,66 @@
   },
   "extras": [
     {
-      "type": "PATTERN",
-      "value": "\\s"
-    },
-    {
       "type": "SYMBOL",
       "name": "comment"
+    },
+    {
+      "type": "PATTERN",
+      "value": "[\\s\\f\\uFEFF\\u2060\\u200B]|\\r?\\n"
     }
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_newline"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_indent"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_dedent"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "string_start"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_string_content"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "escape_interpolation"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "string_end"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "comment"
+    },
+    {
+      "type": "STRING",
+      "value": "]"
+    },
+    {
+      "type": "STRING",
+      "value": ")"
+    },
+    {
+      "type": "STRING",
+      "value": "}"
+    },
+    {
+      "type": "STRING",
+      "value": "except"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}

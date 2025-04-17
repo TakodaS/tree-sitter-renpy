@@ -1,3 +1,5 @@
 .venv
 .direnv
 node_modules
+.ccls-cache
+build
