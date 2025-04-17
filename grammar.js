@@ -15,6 +15,7 @@ module.exports = grammar({
 		/[\s\f\uFEFF\u2060\u200B]|\r?\n/,
 		// $.line_continuation,
 	],
+	conflicts: ($) => [[$.renpy_statement]],
 	externals: ($) => [
 		$._newline,
 		$._indent,
@@ -42,18 +43,26 @@ module.exports = grammar({
 		source_file: ($) =>
 			repeat(
 				choice(
-					$.comment,
-					$.string,
-					// $.header,
-					// $.statement,
+					$.header,
+					$.statement,
 					// $.python_block,
 					// $.python_inline,
+					$.comment,
+					$.string,
+					prec(-1, $.block),
+					// prec(-1, $.python_expression),
 					// $.number,
 				),
 			),
 
 		// block
-		block: ($) => seq($._newline, $._indent, repeat1($.statement), $._dedent),
+		block: ($) =>
+			seq(
+				$._newline,
+				$._indent,
+				repeat1(choice($.statement, prec(-1, $.python_expression))),
+				$._dedent,
+			),
 
 		// Comments
 		comment: (_) => token(seq("#", /.*/)),
@@ -93,20 +102,18 @@ module.exports = grammar({
 
 		// Python blocks
 		python_block: ($) =>
-			prec(
-				1,
-				seq(
-					optional(choice("init", "early")),
-					optional($.number),
-					"python",
-					":",
-					repeat1($.indented_python),
-				),
+			seq(
+				optional(choice("init", "early")),
+				optional($.number),
+				"python",
+				":",
+				repeat1($.python_expression),
+				$._dedent,
 			),
 
 		indented_python: ($) => seq(/[ ]{4}/, $.python_expression),
 
-		python_expression: (_) => token(/.*/),
+		python_expression: (_) => token(/[^\\\n"]+/),
 
 		// Identifiers (variable, label names)
 		identifier: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
@@ -121,8 +128,10 @@ module.exports = grammar({
 
 		// Renpy keywords
 
-		// Ren'Py statements
 		statement: ($) =>
+			choice($.control_statement, $.renpy_statement, $.define_statement),
+		// Ren'Py statements
+		renpy_statement: ($) =>
 			seq(
 				field(
 					"keyword",
@@ -140,7 +149,6 @@ module.exports = grammar({
 						"if",
 						"elif",
 						"else",
-						"define",
 						"play",
 						"stop",
 						"queue",
@@ -186,13 +194,21 @@ module.exports = grammar({
 						"hotbar",
 						"text",
 						"has",
-						"default",
 						"for",
 						"use",
 					),
 				),
+				repeat1(choice($.identifier, $.string)),
+			),
+
+		control_statement: ($) =>
+			seq(field("keyword", choice("for", "if", "elif")), $.python_expression),
+		define_statement: ($) =>
+			seq(
+				field("keyword", choice("define", "default")),
 				$.identifier,
-				optional(seq("=", $.python_expression)),
+				"=",
+				$.python_expression,
 			),
 	},
 });

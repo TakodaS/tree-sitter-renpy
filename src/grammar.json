@@ -9,11 +9,27 @@
         "members": [
           {
             "type": "SYMBOL",
+            "name": "header"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "statement"
+          },
+          {
+            "type": "SYMBOL",
             "name": "comment"
           },
           {
             "type": "SYMBOL",
             "name": "string"
+          },
+          {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "SYMBOL",
+              "name": "block"
+            }
           }
         ]
       }
@@ -22,18 +38,23 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_newline"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_indent"
-        },
-        {
           "type": "REPEAT1",
           "content": {
-            "type": "SYMBOL",
-            "name": "statement"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "statement"
+              },
+              {
+                "type": "PREC",
+                "value": -1,
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "python_expression"
+                }
+              }
+            ]
           }
         },
         {
@@ -236,61 +257,61 @@
       ]
     },
     "python_block": {
-      "type": "PREC",
-      "value": 1,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "init"
-                  },
-                  {
-                    "type": "STRING",
-                    "value": "early"
-                  }
-                ]
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "number"
-              },
-              {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "STRING",
-            "value": "python"
-          },
-          {
-            "type": "STRING",
-            "value": ":"
-          },
-          {
-            "type": "REPEAT1",
-            "content": {
-              "type": "SYMBOL",
-              "name": "indented_python"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "init"
+                },
+                {
+                  "type": "STRING",
+                  "value": "early"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
             }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "number"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "python"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "python_expression"
           }
-        ]
-      }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_dedent"
+        }
+      ]
     },
     "indented_python": {
       "type": "SEQ",
@@ -309,7 +330,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": ".*"
+        "value": "[^\\\\\\n\"]+"
       }
     },
     "identifier": {
@@ -363,6 +384,23 @@
       ]
     },
     "statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "control_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "define_statement"
+        }
+      ]
+    },
+    "renpy_statement": {
       "type": "SEQ",
       "members": [
         {
@@ -422,10 +460,6 @@
               {
                 "type": "STRING",
                 "value": "else"
-              },
-              {
-                "type": "STRING",
-                "value": "define"
               },
               {
                 "type": "STRING",
@@ -609,10 +643,6 @@
               },
               {
                 "type": "STRING",
-                "value": "default"
-              },
-              {
-                "type": "STRING",
                 "value": "for"
               },
               {
@@ -623,29 +653,84 @@
           }
         },
         {
+          "type": "REPEAT1",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "string"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "control_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "keyword",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "for"
+              },
+              {
+                "type": "STRING",
+                "value": "if"
+              },
+              {
+                "type": "STRING",
+                "value": "elif"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "python_expression"
+        }
+      ]
+    },
+    "define_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "keyword",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "define"
+              },
+              {
+                "type": "STRING",
+                "value": "default"
+              }
+            ]
+          }
+        },
+        {
           "type": "SYMBOL",
           "name": "identifier"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "="
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "python_expression"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "STRING",
+          "value": "="
+        },
+        {
+          "type": "SYMBOL",
+          "name": "python_expression"
         }
       ]
     }
@@ -660,7 +745,11 @@
       "value": "[\\s\\f\\uFEFF\\u2060\\u200B]|\\r?\\n"
     }
   ],
-  "conflicts": [],
+  "conflicts": [
+    [
+      "renpy_statement"
+    ]
+  ],
   "precedences": [],
   "externals": [
     {

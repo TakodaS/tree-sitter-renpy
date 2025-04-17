@@ -1,5 +1,441 @@
 [
   {
+    "type": "arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "python_expression",
+          "named": true
+        },
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "control_statement",
+    "named": true,
+    "fields": {
+      "keyword": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "elif",
+            "named": false
+          },
+          {
+            "type": "for",
+            "named": false
+          },
+          {
+            "type": "if",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "python_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "define_statement",
+    "named": true,
+    "fields": {
+      "keyword": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "default",
+            "named": false
+          },
+          {
+            "type": "define",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "python_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "header",
+    "named": true,
+    "fields": {
+      "args": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
+      "identifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "keyword": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "animate",
+            "named": false
+          },
+          {
+            "type": "early",
+            "named": false
+          },
+          {
+            "type": "init",
+            "named": false
+          },
+          {
+            "type": "label",
+            "named": false
+          },
+          {
+            "type": "transform",
+            "named": false
+          }
+        ]
+      },
+      "priority": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "renpy_statement",
+    "named": true,
+    "fields": {
+      "keyword": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "add",
+            "named": false
+          },
+          {
+            "type": "bar",
+            "named": false
+          },
+          {
+            "type": "block",
+            "named": false
+          },
+          {
+            "type": "button",
+            "named": false
+          },
+          {
+            "type": "call",
+            "named": false
+          },
+          {
+            "type": "choice",
+            "named": false
+          },
+          {
+            "type": "contains",
+            "named": false
+          },
+          {
+            "type": "ease",
+            "named": false
+          },
+          {
+            "type": "easein",
+            "named": false
+          },
+          {
+            "type": "easeout",
+            "named": false
+          },
+          {
+            "type": "elif",
+            "named": false
+          },
+          {
+            "type": "else",
+            "named": false
+          },
+          {
+            "type": "event",
+            "named": false
+          },
+          {
+            "type": "fixed",
+            "named": false
+          },
+          {
+            "type": "for",
+            "named": false
+          },
+          {
+            "type": "frame",
+            "named": false
+          },
+          {
+            "type": "function",
+            "named": false
+          },
+          {
+            "type": "grid",
+            "named": false
+          },
+          {
+            "type": "has",
+            "named": false
+          },
+          {
+            "type": "hbox",
+            "named": false
+          },
+          {
+            "type": "hide",
+            "named": false
+          },
+          {
+            "type": "hotbar",
+            "named": false
+          },
+          {
+            "type": "hotspot",
+            "named": false
+          },
+          {
+            "type": "if",
+            "named": false
+          },
+          {
+            "type": "image",
+            "named": false
+          },
+          {
+            "type": "imagebutton",
+            "named": false
+          },
+          {
+            "type": "imagemap",
+            "named": false
+          },
+          {
+            "type": "input",
+            "named": false
+          },
+          {
+            "type": "jump",
+            "named": false
+          },
+          {
+            "type": "key",
+            "named": false
+          },
+          {
+            "type": "linear",
+            "named": false
+          },
+          {
+            "type": "menu",
+            "named": false
+          },
+          {
+            "type": "mousearea",
+            "named": false
+          },
+          {
+            "type": "null",
+            "named": false
+          },
+          {
+            "type": "on",
+            "named": false
+          },
+          {
+            "type": "parallel",
+            "named": false
+          },
+          {
+            "type": "pass",
+            "named": false
+          },
+          {
+            "type": "pause",
+            "named": false
+          },
+          {
+            "type": "play",
+            "named": false
+          },
+          {
+            "type": "queue",
+            "named": false
+          },
+          {
+            "type": "repeat",
+            "named": false
+          },
+          {
+            "type": "return",
+            "named": false
+          },
+          {
+            "type": "scene",
+            "named": false
+          },
+          {
+            "type": "screen",
+            "named": false
+          },
+          {
+            "type": "show",
+            "named": false
+          },
+          {
+            "type": "side",
+            "named": false
+          },
+          {
+            "type": "stop",
+            "named": false
+          },
+          {
+            "type": "sustain",
+            "named": false
+          },
+          {
+            "type": "text",
+            "named": false
+          },
+          {
+            "type": "textbutton",
+            "named": false
+          },
+          {
+            "type": "time",
+            "named": false
+          },
+          {
+            "type": "timer",
+            "named": false
+          },
+          {
+            "type": "transform",
+            "named": false
+          },
+          {
+            "type": "use",
+            "named": false
+          },
+          {
+            "type": "vbar",
+            "named": false
+          },
+          {
+            "type": "vbox",
+            "named": false
+          },
+          {
+            "type": "viewport",
+            "named": false
+          },
+          {
+            "type": "voice",
+            "named": false
+          },
+          {
+            "type": "window",
+            "named": false
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -9,11 +445,46 @@
       "required": false,
       "types": [
         {
+          "type": "block",
+          "named": true
+        },
+        {
           "type": "comment",
           "named": true
         },
         {
+          "type": "header",
+          "named": true
+        },
+        {
+          "type": "statement",
+          "named": true
+        },
+        {
           "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "control_statement",
+          "named": true
+        },
+        {
+          "type": "define_statement",
+          "named": true
+        },
+        {
+          "type": "renpy_statement",
           "named": true
         }
       ]
@@ -43,12 +514,304 @@
     "named": false
   },
   {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": ":",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "add",
+    "named": false
+  },
+  {
+    "type": "animate",
+    "named": false
+  },
+  {
+    "type": "bar",
+    "named": false
+  },
+  {
+    "type": "block",
+    "named": false
+  },
+  {
+    "type": "button",
+    "named": false
+  },
+  {
+    "type": "call",
+    "named": false
+  },
+  {
+    "type": "choice",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
   },
   {
+    "type": "contains",
+    "named": false
+  },
+  {
+    "type": "default",
+    "named": false
+  },
+  {
+    "type": "define",
+    "named": false
+  },
+  {
+    "type": "early",
+    "named": false
+  },
+  {
+    "type": "ease",
+    "named": false
+  },
+  {
+    "type": "easein",
+    "named": false
+  },
+  {
+    "type": "easeout",
+    "named": false
+  },
+  {
+    "type": "elif",
+    "named": false
+  },
+  {
+    "type": "else",
+    "named": false
+  },
+  {
     "type": "escape_sequence",
     "named": true
+  },
+  {
+    "type": "event",
+    "named": false
+  },
+  {
+    "type": "fixed",
+    "named": false
+  },
+  {
+    "type": "for",
+    "named": false
+  },
+  {
+    "type": "frame",
+    "named": false
+  },
+  {
+    "type": "function",
+    "named": false
+  },
+  {
+    "type": "grid",
+    "named": false
+  },
+  {
+    "type": "has",
+    "named": false
+  },
+  {
+    "type": "hbox",
+    "named": false
+  },
+  {
+    "type": "hide",
+    "named": false
+  },
+  {
+    "type": "hotbar",
+    "named": false
+  },
+  {
+    "type": "hotspot",
+    "named": false
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "if",
+    "named": false
+  },
+  {
+    "type": "image",
+    "named": false
+  },
+  {
+    "type": "imagebutton",
+    "named": false
+  },
+  {
+    "type": "imagemap",
+    "named": false
+  },
+  {
+    "type": "init",
+    "named": false
+  },
+  {
+    "type": "input",
+    "named": false
+  },
+  {
+    "type": "jump",
+    "named": false
+  },
+  {
+    "type": "key",
+    "named": false
+  },
+  {
+    "type": "label",
+    "named": false
+  },
+  {
+    "type": "linear",
+    "named": false
+  },
+  {
+    "type": "menu",
+    "named": false
+  },
+  {
+    "type": "mousearea",
+    "named": false
+  },
+  {
+    "type": "null",
+    "named": false
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "on",
+    "named": false
+  },
+  {
+    "type": "parallel",
+    "named": false
+  },
+  {
+    "type": "pass",
+    "named": false
+  },
+  {
+    "type": "pause",
+    "named": false
+  },
+  {
+    "type": "play",
+    "named": false
+  },
+  {
+    "type": "python_expression",
+    "named": true
+  },
+  {
+    "type": "queue",
+    "named": false
+  },
+  {
+    "type": "repeat",
+    "named": false
+  },
+  {
+    "type": "return",
+    "named": false
+  },
+  {
+    "type": "scene",
+    "named": false
+  },
+  {
+    "type": "screen",
+    "named": false
+  },
+  {
+    "type": "show",
+    "named": false
+  },
+  {
+    "type": "side",
+    "named": false
+  },
+  {
+    "type": "stop",
+    "named": false
+  },
+  {
+    "type": "sustain",
+    "named": false
+  },
+  {
+    "type": "text",
+    "named": false
+  },
+  {
+    "type": "textbutton",
+    "named": false
+  },
+  {
+    "type": "time",
+    "named": false
+  },
+  {
+    "type": "timer",
+    "named": false
+  },
+  {
+    "type": "transform",
+    "named": false
+  },
+  {
+    "type": "use",
+    "named": false
+  },
+  {
+    "type": "vbar",
+    "named": false
+  },
+  {
+    "type": "vbox",
+    "named": false
+  },
+  {
+    "type": "viewport",
+    "named": false
+  },
+  {
+    "type": "voice",
+    "named": false
+  },
+  {
+    "type": "window",
+    "named": false
   }
 ]
