@@ -29,7 +29,10 @@
             ${pkg-name} = config.packages.${pkg-name};
           };
           devShells.default = pkgs.mkShell {
-            packages = with pkgs; [ tree-sitter ];
+            packages = with pkgs; [
+              tree-sitter
+              nodejs
+            ];
           };
         };
     };
