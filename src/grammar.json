@@ -1,6 +1,6 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
-  "name": "python",
+  "name": "renpy",
   "word": "identifier",
   "rules": {
     "module": {
@@ -765,6 +765,14 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "renpy_header"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "renpy_statement"
+        },
+        {
+          "type": "SYMBOL",
           "name": "if_statement"
         },
         {
@@ -798,6 +806,361 @@
         {
           "type": "SYMBOL",
           "name": "match_statement"
+        }
+      ]
+    },
+    "number": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[+-]?\\d+(\\.\\d+)?"
+      }
+    },
+    "renpy_header": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "keyword",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "label"
+                },
+                {
+                  "type": "STRING",
+                  "value": "init"
+                },
+                {
+                  "type": "STRING",
+                  "value": "early"
+                },
+                {
+                  "type": "STRING",
+                  "value": "transform"
+                },
+                {
+                  "type": "STRING",
+                  "value": "animate"
+                }
+              ]
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "priority",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "number"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "identifier",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "parameters",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "parameters"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": ":"
+          }
+        ]
+      }
+    },
+    "renpy_statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "keyword",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "transform"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "screen"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "image"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "hide"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "show"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "scene"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "jump"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "menu"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "return"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "call"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "define"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "play"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "stop"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "queue"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "voice"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "sustain"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "event"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "on"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "pause"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "linear"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "ease"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "easein"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "easeout"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "choice"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "function"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "parallel"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "block"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "contains"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "time"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "pass"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "repeat"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "add"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "bar"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "vbar"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "button"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "textbutton"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "imagebutton"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "mousearea"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "imagemap"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "fixed"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "frame"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "grid"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "hbox"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "vbox"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "side"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "window"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "null"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "input"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "key"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "timer"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "transform"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "viewport"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "hotspot"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "hotbar"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "text"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "has"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "default"
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "use"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            }
+          ]
         }
       ]
     },
@@ -6242,6 +6605,10 @@
       "list_splat_pattern"
     ],
     [
+      "primary_expression",
+      "renpy_statement"
+    ],
+    [
       "tuple",
       "tuple_pattern"
     ],
@@ -6268,6 +6635,13 @@
     [
       "match_statement",
       "primary_expression"
+    ],
+    [
+      "return_statement",
+      "renpy_statement"
+    ],
+    [
+      "renpy_statement"
     ]
   ],
   "precedences": [],
@@ -6336,5 +6710,6 @@
     "primary_expression",
     "pattern",
     "parameter"
-  ]
+  ],
+  "reserved": {}
 }
