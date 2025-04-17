@@ -75,6 +75,8 @@ module.exports = grammar({
 
 		indented_python: (_) => token(seq(/[ ]{4}/, /.*/)),
 
+		python_expression: ($) => choice($.python_inline, $.python_block),
+
 		// Identifiers (variable, label names)
 		identifier: (_) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
@@ -158,6 +160,8 @@ module.exports = grammar({
 						),
 					),
 					repeat($.identifier),
+					"=",
+					field("value", $.python_expression),
 				),
 			),
 	},
